@@ -25,10 +25,14 @@
                 color: #757575;
                 width: 21px;
                 height: 21px;
+                cursor: pointer;
                 &.active {
                     color: #B3B3B3;
                     width: 24px;
                     height: 24px;
+                }
+                &:hover {
+                    color: #f3f397;
                 }
             }
         }
