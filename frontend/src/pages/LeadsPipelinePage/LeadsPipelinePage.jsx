@@ -26,7 +26,9 @@ const LeadsPipelinePage = () => {
                             {status.name}
                         </div>
                         {leads[status.id].map((lead) => (
-                            <div className="lead-card"><a href="#">{ lead.name }</a></div>
+                            <div className="lead-card">
+                                <a href="#">{lead.name}</a>
+                            </div>
                         ))}
                     </div>
                 ))}

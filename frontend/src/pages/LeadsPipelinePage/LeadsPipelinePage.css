@@ -17,6 +17,10 @@
             background-color: #fff;
             padding: 20px;
             margin-bottom: 5px;
+            cursor: pointer;
+            &:hover {
+                background-color: #F5F5F5;
+            }
         }
     }
 }
