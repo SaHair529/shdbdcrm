@@ -20,11 +20,16 @@ const LeadsPipelinePage = () => {
     return (
         <div className="container-fluid">
             <div className="pipeline">
-                {statuses.map((status) => (
+                {statuses.map((status, index) => (
                     <div className="status">
                         <div className="status__title" style={{borderColor: status.color}}>
                             {status.name}
                         </div>
+                        {index === 0 && (
+                            <div className='add-lead-button'>
+                                Новый лид
+                            </div>
+                        )}
                         {leads[status.id].map((lead) => (
                             <div className="lead-card">
                                 <a href="#">{lead.name}</a>
