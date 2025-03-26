@@ -37,6 +37,9 @@
             &:hover {
                 background-color: #F5F5F5;
             }
+            &.dragging {
+                opacity: .5;
+            }
 
             .leadcard-menu {
                 position: absolute;

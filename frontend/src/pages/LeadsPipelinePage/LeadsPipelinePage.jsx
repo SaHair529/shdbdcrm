@@ -74,9 +74,9 @@ const LeadsPipelinePage = () => {
                                         )}
                                         {leads[status.id] && leads[status.id].map((lead, leadIndex) => (
                                             <Draggable draggableId={lead.id} index={leadIndex} key={lead.id}>
-                                                {(provided) => (
+                                                {(provided, snapshot) => (
                                                     <div
-                                                        className="lead-card"
+                                                        className={`lead-card ${snapshot.isDragging ? 'dragging' : ''}`}
                                                         ref={provided.innerRef}
                                                         {...provided.draggableProps}
                                                         {...provided.dragHandleProps}
