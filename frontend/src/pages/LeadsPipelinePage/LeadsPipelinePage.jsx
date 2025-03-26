@@ -6,6 +6,7 @@ const LeadsPipelinePage = () => {
     const [statuses, setStatuses] = useState([
         { name: 'Первичный контакт', color: '#339dc8', id: 1},
         { name: 'Переговоры', color: 'yellow', id: 2 },
+        { name: 'В работе', color: 'orange', id: 3 },
     ])
     const [leads, setLeads] = useState({
         1: [
@@ -36,7 +37,7 @@ const LeadsPipelinePage = () => {
                                 Новый лид
                             </div>
                         )}
-                        {leads[status.id].map((lead) => (
+                        {leads[status.id] && leads[status.id].map((lead) => (
                             <div className="lead-card" key={lead.id} onClick={() => setActiveLeadId(activeLeadId === lead.id ? null : lead.id)}>
                                 <a href="#">{lead.name}</a>
                                 {activeLeadId === lead.id && (

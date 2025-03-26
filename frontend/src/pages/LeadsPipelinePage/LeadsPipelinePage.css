@@ -52,25 +52,25 @@
                         border-bottom: none;
                     }
                     &:hover {
-                        color: white;
+                        /*color: white;*/
                     }
                 }
                 .btn-success {
                     background-color: #f2fff2;
                     &:hover {
-                        background-color: #4dd14d;
+                        background-color: #c0fdc0;
                     }
                 }
                 .btn-fail {
                     background-color: #ffffe9;
                     &:hover {
-                        background-color: #e4e41b;
+                        background-color: #ffff86;
                     }
                 }
                 .btn-delete {
                     background-color: #ffe8e8;
                     &:hover {
-                        background-color: #ec3e3e;
+                        background-color: #ffb4b4;
                     }
                 }
             }
