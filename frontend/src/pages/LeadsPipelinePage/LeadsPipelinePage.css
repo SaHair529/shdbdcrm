@@ -1,8 +1,10 @@
 .pipeline {
     display: flex;
+    overflow: auto;
     .status {
-        flex: 1;
-        max-width: 315px;
+        flex: 0 0 auto;
+        width: 315px;
+        height: 90vh;
         margin: 0 5px;
         .status__title {
             text-transform: uppercase;
@@ -13,7 +15,7 @@
             margin-bottom: 5px;
         }
         .status__body {
-            height: 100%;
+            min-height: 100px;
         }
         .add-lead-button {
             border: 1px dashed #C5C5C5;
