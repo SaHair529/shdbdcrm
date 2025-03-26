@@ -55,53 +55,54 @@ const LeadsPipelinePage = () => {
             <div className="container-fluid">
                 <div className="pipeline">
                     {statuses.map((status, index) => (
-                        <Droppable droppableId={status.id} key={status.id}>
-                            {(provided, snapshot) => (
-                                <div
-                                    className={`status ${snapshot.isDraggingOver ? 'dragging-over' : ''}`}
-                                    ref={provided.innerRef}
-                                    {...provided.droppableProps}
-                                >
-                                    <div className="status__title" style={{ borderColor: status.color }}>
-                                        {status.name}
+                        <div className="status" key={status.id}>
+                            <div className="status__title" style={{ borderColor: status.color }}>
+                                {status.name}
+                            </div>
+                            <Droppable droppableId={status.id}>
+                                {(provided, snapshot) => (
+                                    <div
+                                        className={`status__body ${snapshot.isDraggingOver ? 'dragging-over' : ''}`}
+                                        ref={provided.innerRef}
+                                        {...provided.droppableProps}
+                                    >
+                                        {index === 0 && (
+                                            <div className='add-lead-button'>
+                                                Новый лид
+                                            </div>
+                                        )}
+                                        {leads[status.id] && leads[status.id].map((lead, leadIndex) => (
+                                            <Draggable draggableId={lead.id} index={leadIndex} key={lead.id}>
+                                                {(provided) => (
+                                                    <div
+                                                        className="lead-card"
+                                                        ref={provided.innerRef}
+                                                        {...provided.draggableProps}
+                                                        {...provided.dragHandleProps}
+                                                        onClick={() => setActiveLeadId(activeLeadId === lead.id ? null : lead.id)}
+                                                    >
+                                                        <a href="#">{lead.name}</a>
+                                                        {activeLeadId === lead.id && (
+                                                            <div className="leadcard-menu" ref={leadcardMenuRef}>
+                                                                <div className="leadcard-menu-btn btn-success">Реализовано</div>
+                                                                <div className="leadcard-menu-btn btn-fail">Не реализовано</div>
+                                                                <div className="leadcard-menu-btn btn-delete">Удалить</div>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                )}
+                                            </Draggable>
+                                        ))}
+                                        {/* Индикатор места вставки */}
+                                        {provided.placeholder}
                                     </div>
-                                    {index === 0 && (
-                                        <div className='add-lead-button'>
-                                            Новый лид
-                                        </div>
-                                    )}
-                                    {leads[status.id] && leads[status.id].map((lead, leadIndex) => (
-                                        <Draggable draggableId={lead.id} index={leadIndex} key={lead.id}>
-                                            {(provided) => (
-                                                <div
-                                                    className="lead-card"
-                                                    ref={provided.innerRef}
-                                                    {...provided.draggableProps}
-                                                    {...provided.dragHandleProps}
-                                                    onClick={() => setActiveLeadId(activeLeadId === lead.id ? null : lead.id)}
-                                                >
-                                                    <a href="#">{lead.name}</a>
-                                                    {activeLeadId === lead.id && (
-                                                        <div className="leadcard-menu" ref={leadcardMenuRef}>
-                                                            <div className="leadcard-menu-btn btn-success">Реализовано</div>
-                                                            <div className="leadcard-menu-btn btn-fail">Не реализовано</div>
-                                                            <div className="leadcard-menu-btn btn-delete">Удалить</div>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            )}
-                                        </Draggable>
-                                    ))}
-                                    {/* Индикатор места вставки */}
-                                    {provided.placeholder}
-                                </div>
-                            )}
-                        </Droppable>
+                                )}
+                            </Droppable>
+                        </div>
                     ))}
                 </div>
             </div>
         </DragDropContext>
-
     );
 };
 
