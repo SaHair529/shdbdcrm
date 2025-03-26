@@ -59,6 +59,7 @@ const LeadsPipelinePage = () => {
                             <div className="status__title" style={{ borderColor: status.color }}>
                                 {status.name}
                             </div>
+                            {/* Перенос Droppable на status__body */}
                             <Droppable droppableId={status.id}>
                                 {(provided, snapshot) => (
                                     <div
