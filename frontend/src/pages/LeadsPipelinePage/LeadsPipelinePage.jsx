@@ -23,6 +23,7 @@ const LeadsPipelinePage = () => {
     });
     const [activeLeadId, setActiveLeadId] = useState(null);
     const leadcardMenuRef = useRef(null);
+    const [updatebleLead, setUpdatebleLead] = useState(null)
 
     useClickOutside(leadcardMenuRef, () => setActiveLeadId(null));
 
@@ -68,7 +69,7 @@ const LeadsPipelinePage = () => {
                                         {...provided.droppableProps}
                                     >
                                         {index === 0 && (
-                                            <div className='add-lead-button'>
+                                            <div className='add-lead-button' onClick={() => setUpdatebleLead({})}>
                                                 Новый лид
                                             </div>
                                         )}
@@ -108,78 +109,80 @@ const LeadsPipelinePage = () => {
                     ))}
                 </div>
             </div>
-            <div className="create-lead-panel">
-                <div className="create-lead-header">
-                    <h3>Создание нового лида</h3>
-                    <div className="close-icon">×</div>
+            {updatebleLead && (
+                <div className="create-lead-panel">
+                    <div className="create-lead-header">
+                        <h3>Создание нового лида</h3>
+                        <div className="close-icon" onClick={() => setUpdatebleLead(null)}>×</div>
+                    </div>
+
+                    <div className="create-lead-body">
+                        <div className="form-group">
+                            <label>Название лида</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Введите название"
+                                name='title'
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label>ФИО</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Введите ФИО"
+                                name='fullname'
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Телефон</label>
+                            <input
+                                type="number"
+                                className="form-control"
+                                placeholder="Введите телефон"
+                                name='phone'
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Email</label>
+                            <input
+                                type="number"
+                                className="form-control"
+                                placeholder="Введите email"
+                                name='email'
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Статус</label>
+                            <select className="form-control" name='status'>
+                                <option>Первичный контакт</option>
+                                <option>Переговоры</option>
+                                <option>В работе</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label>Описание</label>
+                            <textarea
+                                className="form-control"
+                                rows="4"
+                                placeholder="Добавьте описание"
+                                name='description'
+                            ></textarea>
+                        </div>
+
+                        <div className="form-actions">
+                            <button className="btn btn-primary">Создать</button>
+                            <button className="btn btn-cancel">Отмена</button>
+                        </div>
+                    </div>
                 </div>
-
-                <div className="create-lead-body">
-                    <div className="form-group">
-                        <label>Название лида</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            placeholder="Введите название"
-                            name='title'
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label>ФИО</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            placeholder="Введите ФИО"
-                            name='fullname'
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label>Телефон</label>
-                        <input
-                            type="number"
-                            className="form-control"
-                            placeholder="Введите телефон"
-                            name='phone'
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label>Email</label>
-                        <input
-                            type="number"
-                            className="form-control"
-                            placeholder="Введите email"
-                            name='email'
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label>Статус</label>
-                        <select className="form-control" name='status'>
-                            <option>Первичный контакт</option>
-                            <option>Переговоры</option>
-                            <option>В работе</option>
-                        </select>
-                    </div>
-
-                    <div className="form-group">
-                        <label>Описание</label>
-                        <textarea
-                            className="form-control"
-                            rows="4"
-                            placeholder="Добавьте описание"
-                            name='description'
-                        ></textarea>
-                    </div>
-
-                    <div className="form-actions">
-                        <button className="btn btn-primary">Создать</button>
-                        <button className="btn btn-cancel">Отмена</button>
-                    </div>
-                </div>
-            </div>
+            )}
         </DragDropContext>
     );
 };
