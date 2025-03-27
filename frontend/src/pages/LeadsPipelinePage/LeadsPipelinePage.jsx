@@ -56,7 +56,7 @@ const LeadsPipelinePage = () => {
                 <div className="pipeline">
                     {statuses.map((status, index) => (
                         <div className="status" key={status.id}>
-                            <div className="status__title" style={{ borderColor: status.color }}>
+                            <div className="status__title" style={{borderColor: status.color}}>
                                 {status.name}
                             </div>
                             {/* Перенос Droppable на status__body */}
@@ -85,9 +85,14 @@ const LeadsPipelinePage = () => {
                                                         <a href="#">{lead.name}</a>
                                                         {activeLeadId === lead.id && (
                                                             <div className="leadcard-menu" ref={leadcardMenuRef}>
-                                                                <div className="leadcard-menu-btn btn-success">Реализовано</div>
-                                                                <div className="leadcard-menu-btn btn-fail">Не реализовано</div>
-                                                                <div className="leadcard-menu-btn btn-delete">Удалить</div>
+                                                                <div
+                                                                    className="leadcard-menu-btn btn-success">Реализовано
+                                                                </div>
+                                                                <div className="leadcard-menu-btn btn-fail">Не
+                                                                    реализовано
+                                                                </div>
+                                                                <div className="leadcard-menu-btn btn-delete">Удалить
+                                                                </div>
                                                             </div>
                                                         )}
                                                     </div>
@@ -101,6 +106,78 @@ const LeadsPipelinePage = () => {
                             </Droppable>
                         </div>
                     ))}
+                </div>
+            </div>
+            <div className="create-lead-panel">
+                <div className="create-lead-header">
+                    <h3>Создание нового лида</h3>
+                    <div className="close-icon">×</div>
+                </div>
+
+                <div className="create-lead-body">
+                    <div className="form-group">
+                        <label>Название лида</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Введите название"
+                            name='title'
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>ФИО</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Введите ФИО"
+                            name='fullname'
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Телефон</label>
+                        <input
+                            type="number"
+                            className="form-control"
+                            placeholder="Введите телефон"
+                            name='phone'
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Email</label>
+                        <input
+                            type="number"
+                            className="form-control"
+                            placeholder="Введите email"
+                            name='email'
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Статус</label>
+                        <select className="form-control" name='status'>
+                            <option>Первичный контакт</option>
+                            <option>Переговоры</option>
+                            <option>В работе</option>
+                        </select>
+                    </div>
+
+                    <div className="form-group">
+                        <label>Описание</label>
+                        <textarea
+                            className="form-control"
+                            rows="4"
+                            placeholder="Добавьте описание"
+                            name='description'
+                        ></textarea>
+                    </div>
+
+                    <div className="form-actions">
+                        <button className="btn btn-primary">Создать</button>
+                        <button className="btn btn-cancel">Отмена</button>
+                    </div>
                 </div>
             </div>
         </DragDropContext>
