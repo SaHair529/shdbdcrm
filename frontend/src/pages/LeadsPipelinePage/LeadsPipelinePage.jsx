@@ -86,14 +86,10 @@ const LeadsPipelinePage = () => {
                                                         <a href="#">{lead.name}</a>
                                                         {activeLeadId === lead.id && (
                                                             <div className="leadcard-menu" ref={leadcardMenuRef}>
-                                                                <div
-                                                                    className="leadcard-menu-btn btn-success">Реализовано
-                                                                </div>
-                                                                <div className="leadcard-menu-btn btn-fail">Не
-                                                                    реализовано
-                                                                </div>
-                                                                <div className="leadcard-menu-btn btn-delete">Удалить
-                                                                </div>
+                                                                <div className="leadcard-menu-btn btn-success">Реализовано</div>
+                                                                <div className="leadcard-menu-btn btn-fail">Не реализовано</div>
+                                                                <div className="leadcard-menu-btn btn-update">Обновить</div>
+                                                                <div className="leadcard-menu-btn btn-delete">Удалить</div>
                                                             </div>
                                                         )}
                                                     </div>

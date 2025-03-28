@@ -75,6 +75,12 @@
                         background-color: #ffff86;
                     }
                 }
+                .btn-update {
+                    background-color: #e9e9ff;
+                    &:hover {
+                        background-color: #d3d3ff;
+                    }
+                }
                 .btn-delete {
                     background-color: #ffe8e8;
                     &:hover {
