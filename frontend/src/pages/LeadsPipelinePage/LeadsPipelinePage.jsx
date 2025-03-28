@@ -23,7 +23,7 @@ const LeadsPipelinePage = () => {
     });
     const [activeLeadId, setActiveLeadId] = useState(null);
     const leadcardMenuRef = useRef(null);
-    const [updatebleLead, setUpdatebleLead] = useState(null)
+    const [newLead, setNewLead] = useState(null)
 
     useClickOutside(leadcardMenuRef, () => setActiveLeadId(null));
 
@@ -69,7 +69,7 @@ const LeadsPipelinePage = () => {
                                         {...provided.droppableProps}
                                     >
                                         {index === 0 && (
-                                            <div className='add-lead-button' onClick={() => setUpdatebleLead({})}>
+                                            <div className='add-lead-button' onClick={() => setNewLead({})}>
                                                 Новый лид
                                             </div>
                                         )}
@@ -105,11 +105,11 @@ const LeadsPipelinePage = () => {
                     ))}
                 </div>
             </div>
-            {updatebleLead && (
+            {newLead && (
                 <div className="create-lead-panel">
                     <div className="create-lead-header">
                         <h3>Создание нового лида</h3>
-                        <div className="close-icon" onClick={() => setUpdatebleLead(null)}>×</div>
+                        <div className="close-icon" onClick={() => setNewLead(null)}>×</div>
                     </div>
 
                     <div className="create-lead-body">
