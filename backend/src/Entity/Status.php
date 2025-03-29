@@ -9,7 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 class Status
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: "SEQUENCE")]
+    #[ORM\SequenceGenerator(sequenceName: "status_id_seq")]
     #[ORM\Column]
     private ?int $id = null;
 
