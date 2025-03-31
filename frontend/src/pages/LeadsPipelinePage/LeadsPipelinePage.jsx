@@ -1,14 +1,11 @@
-import React, { useRef, useState } from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import './LeadsPipelinePage.css'
 import useClickOutside from "../../components/useClickOutside"
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd'
+import api from "../../components/api";
 
 const LeadsPipelinePage = () => {
-    const [statuses, setStatuses] = useState([
-        { name: 'Первичный контакт', color: '#339dc8', id: '1' },
-        { name: 'Переговоры', color: 'yellow', id: '2' },
-        { name: 'В работе', color: 'orange', id: '3' },
-    ]);
+    const [statuses, setStatuses] = useState([]);
     const [leads, setLeads] = useState({
         1: [
             { name: 'Лид №12345', id: '1' },
@@ -50,6 +47,23 @@ const LeadsPipelinePage = () => {
         // Обновляем состояние
         setLeads(newLeads);
     };
+
+    useEffect(() => {
+        fetchStatuses()
+    }, [])
+
+    const fetchStatuses = () => {
+        api.get('/status/').then((response) => {
+            response.data.map((status) => {
+                status['id'] = status['id'].toString()
+            })
+            setStatuses(response.data)
+        })
+            .catch(error => {
+                alert('Ошибка загрузки статусов воронки. Обратитесь к разработчику')
+                console.error(error)
+            })
+    }
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
