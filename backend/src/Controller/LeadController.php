@@ -2,14 +2,15 @@
 
 namespace App\Controller;
 
-use App\Entity\Status;
+use App\Entity\Lead;
+use App\Repository\LeadRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/status')]
-class StatusController extends AbstractController
+#[Route('/lead')]
+class LeadController extends AbstractController
 {
     public function __construct(private EntityManagerInterface $em)
     {
@@ -18,8 +19,8 @@ class StatusController extends AbstractController
     #[Route('/', methods: ['GET'])]
     public function list(): JsonResponse
     {
-        $statuses = $this->em->getRepository(Status::class)->findAll();
+        $leads = $this->em->getRepository(Lead::class)->findAll();
 
-        return $this->json($statuses);
+        return $this->json($leads);
     }
 }
