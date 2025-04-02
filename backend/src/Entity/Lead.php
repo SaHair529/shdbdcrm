@@ -5,32 +5,41 @@ namespace App\Entity;
 use App\Repository\LeadRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: LeadRepository::class)]
 class Lead
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: "SEQUENCE")]
+    #[ORM\SequenceGenerator(sequenceName: "lead_id_seq")]
     #[ORM\Column]
+    #[Groups(['lead_compact'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['lead_compact'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['lead_compact'])]
     private ?string $fullname = null;
 
     #[ORM\Column(length: 25)]
+    #[Groups(['lead_compact'])]
     private ?string $phone = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['lead_compact'])]
     private ?string $email = null;
 
-    #[ORM\ManyToOne(inversedBy: 'leads')]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'leads')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['lead_compact'])]
     private ?Status $status = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['lead_compact'])]
     private ?string $description = null;
 
     public function getId(): ?int
