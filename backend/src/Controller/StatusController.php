@@ -6,6 +6,7 @@ use App\Entity\Status;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/status')]
@@ -20,6 +21,6 @@ class StatusController extends AbstractController
     {
         $statuses = $this->em->getRepository(Status::class)->findAll();
 
-        return $this->json($statuses);
+        return $this->json($statuses, Response::HTTP_OK, [], ['groups' => 'status_compact']);
     }
 }

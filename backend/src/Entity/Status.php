@@ -15,13 +15,15 @@ class Status
     #[ORM\GeneratedValue(strategy: "SEQUENCE")]
     #[ORM\SequenceGenerator(sequenceName: "status_id_seq")]
     #[ORM\Column]
-    #[Groups(['lead_compact'])]
+    #[Groups(['lead_compact', 'status_compact'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['status_compact'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 10)]
+    #[Groups(['status_compact'])]
     private ?string $color = null;
 
     /**
