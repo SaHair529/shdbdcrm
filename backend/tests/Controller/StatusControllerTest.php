@@ -50,6 +50,9 @@ class StatusControllerTest extends WebTestCase
     {
         $statuses = $this->em->getRepository(Status::class)->findAll();
         foreach ($statuses as $status) {
+            foreach ($status->getLeads() as $lead) {
+                $this->em->remove($lead);
+            }
             $this->em->remove($status);
         }
         $this->em->flush();

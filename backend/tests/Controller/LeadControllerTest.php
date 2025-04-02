@@ -55,4 +55,18 @@ class LeadControllerTest extends WebTestCase
         }
         $this->assertTrue($found);
     }
+
+    public function tearDown(): void
+    {
+        $statuses = $this->em->getRepository(Status::class)->findAll();
+        foreach ($statuses as $status) {
+            foreach ($status->getLeads() as $lead) {
+                $this->em->remove($lead);
+            }
+            $this->em->remove($status);
+        }
+        $this->em->flush();
+
+        parent::tearDown();
+    }
 }

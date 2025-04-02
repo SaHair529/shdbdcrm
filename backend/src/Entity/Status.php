@@ -29,7 +29,7 @@ class Status
     /**
      * @var Collection<int, Lead>
      */
-    #[ORM\OneToMany(targetEntity: Lead::class, mappedBy: 'status')]
+    #[ORM\OneToMany(targetEntity: Lead::class, mappedBy: 'status', cascade: ['remove'])]
     private Collection $leads;
 
     public function __construct()

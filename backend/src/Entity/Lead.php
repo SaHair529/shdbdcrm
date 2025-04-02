@@ -34,7 +34,7 @@ class Lead
     private ?string $email = null;
 
     #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'leads')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Groups(['lead_compact'])]
     private ?Status $status = null;
 
