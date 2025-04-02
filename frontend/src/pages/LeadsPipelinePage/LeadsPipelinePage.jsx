@@ -6,18 +6,7 @@ import api from "../../components/api";
 
 const LeadsPipelinePage = () => {
     const [statuses, setStatuses] = useState([]);
-    const [leads, setLeads] = useState({
-        1: [
-            { name: 'Лид №12345', id: '1' },
-            { name: 'Лид №12346', id: '2' },
-        ],
-        2: [
-            { name: 'Лид №12347', id: '3' },
-            { name: 'Лид №12348', id: '4' },
-            { name: 'Лид №12349', id: '5' },
-        ],
-        3: []
-    });
+    const [leads, setLeads] = useState({});
     const [activeLeadId, setActiveLeadId] = useState(null);
     const leadcardMenuRef = useRef(null);
     const [newLead, setNewLead] = useState(null)
@@ -49,20 +38,36 @@ const LeadsPipelinePage = () => {
     };
 
     useEffect(() => {
-        fetchStatuses()
+        fetchStatusesAndLeads()
     }, [])
 
-    const fetchStatuses = () => {
-        api.get('/status/').then((response) => {
+    const fetchStatusesAndLeads = async () => {
+        try {
+            let response = await api.get('/status/')
             response.data.map((status) => {
                 status['id'] = status['id'].toString()
             })
             setStatuses(response.data)
-        })
-            .catch(error => {
-                alert('Ошибка загрузки статусов воронки. Обратитесь к разработчику')
-                console.error(error)
+
+            const leadsObject = {}
+            response.data.map((status) => {
+                leadsObject[status['id']] = []
             })
+
+            response = await api.get('/lead/')
+            response.data.map((lead) => {
+                if (!leadsObject[lead.status.id]) {
+                    leadsObject[lead.status.id] = []
+                }
+                lead.id = lead.id.toString()
+                leadsObject[lead.status.id].push(lead)
+            })
+            setLeads(leadsObject)
+        }
+        catch(error) {
+            alert('Ошибка загрузки страницы. Обратитесь к разработчику')
+            console.error(error)
+        }
     }
 
     return (
@@ -97,7 +102,7 @@ const LeadsPipelinePage = () => {
                                                         {...provided.dragHandleProps}
                                                         onClick={() => setActiveLeadId(activeLeadId === lead.id ? null : lead.id)}
                                                     >
-                                                        <a href="#">{lead.name}</a>
+                                                        <a href="#">{lead.title}</a>
                                                         {activeLeadId === lead.id && (
                                                             <div className="leadcard-menu" ref={leadcardMenuRef}>
                                                                 <div className="leadcard-menu-btn btn-success">Реализовано</div>
