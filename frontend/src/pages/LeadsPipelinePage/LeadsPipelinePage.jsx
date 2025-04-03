@@ -35,6 +35,10 @@ const LeadsPipelinePage = () => {
 
         // Обновляем состояние
         setLeads(newLeads);
+
+        api.patch(`/lead/${lead.id}`, {
+            status_id: destinationStatusId,
+        })
     };
 
     useEffect(() => {
