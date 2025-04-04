@@ -7,6 +7,7 @@ use App\Entity\Status;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class LeadControllerTest extends WebTestCase
 {
@@ -87,6 +88,35 @@ class LeadControllerTest extends WebTestCase
 
         $lead = $this->em->getRepository(Lead::class)->find($lead->getId());
         $this->assertequals($lead->getStatus()->getId(), $status2->getId());
+    }
+
+    public function testCreate(): void
+    {
+        $status = new Status();
+        $status->setName('Test Status')
+            ->setColor('black');
+
+        $this->em->persist($status);
+        $this->em->flush();
+
+        $requestData = [
+            'title' => 'Test Lead 124325326315',
+            'fullname' => 'Test Lead 124325326315',
+            'phone' => '0123456406',
+            'status_id' => $status->getId(),
+        ];
+
+        $this->client->request('POST', '/lead/', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode($requestData));
+
+        $response = $this->client->getResponse();
+        $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode());
+
+        $lead = $this->em->getRepository(Lead::class)->findOneBy(['title' => $requestData['title']]);
+        $this->assertnotnull($lead);
+        $this->assertEquals($requestData['title'], $lead->getTitle());
+        $this->assertEquals($requestData['fullname'], $lead->getFullname());
+        $this->assertEquals($requestData['phone'], $lead->getPhone());
+        $this->assertEquals($requestData['status_id'], $lead->getStatus()->getId());
     }
 
     public function tearDown(): void
