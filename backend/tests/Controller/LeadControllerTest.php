@@ -56,6 +56,39 @@ class LeadControllerTest extends WebTestCase
         $this->assertTrue($found);
     }
 
+    public function testPatch(): void
+    {
+        $status1 = new Status();
+        $status1->setName('status1')
+            ->setColor('black');
+        $status2 = new Status();
+        $status2->setName('status2')
+            ->setColor('white');
+
+        $lead = new Lead();
+        $lead->setTitle('Test Lead')
+            ->setFullname('Test Lead')
+            ->setDescription('Test Lead')
+            ->setPhone('0123456789')
+            ->setEmail('test@test.com')
+            ->setStatus($status1);
+
+        $this->em->persist($lead);
+        $this->em->persist($status2);
+        $this->em->flush();
+
+        $this->assertequals($lead->getStatus()->getId(), $status1->getId());
+
+        $this->client->request('PATCH', "/lead/{$lead->getId()}", [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
+            'status_id' => $status2->getId(),
+        ]));
+        $response = $this->client->getResponse();
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $lead = $this->em->getRepository(Lead::class)->find($lead->getId());
+        $this->assertequals($lead->getStatus()->getId(), $status2->getId());
+    }
+
     public function tearDown(): void
     {
         $statuses = $this->em->getRepository(Status::class)->findAll();
