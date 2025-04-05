@@ -18,6 +18,7 @@ const LeadsPipelinePage = () => {
         status_id: "",
         description: "",
     })
+    const [updateLead, setUpdateLead] = useState(null);
 
     useClickOutside(leadcardMenuRef, () => setActiveLeadId(null));
 
@@ -111,7 +112,7 @@ const LeadsPipelinePage = () => {
         setOpenNewLeadForm(false)
     }
 
-    const cancelCreateLead = async (e) => {
+    const cancelCreateLead = async () => {
         setNewLead({
             title: "",
             fullname: "",
@@ -123,6 +124,27 @@ const LeadsPipelinePage = () => {
         setOpenNewLeadForm(false)
     }
 
+    const handleClickUpdateLead = (lead) => {
+        lead.status_id = lead.status.id
+        setUpdateLead(lead)
+    }
+
+    const cancelUpdateLead = () => {
+        setUpdateLead(null)
+    }
+
+    const submitUpdateLead = (e) => {
+        e.preventDefault()
+
+        api.patch(`/lead/${updateLead.id}`, updateLead)
+        .then((response) => {
+            if (response.status === 200) {
+                setUpdateLead(null)
+                fetchStatusesAndLeads()
+            }
+        })
+    }
+
     const handleCreateLeadInputChange = (e) => {
         const { name, value } = e.target;
         setNewLead((prevData) => ({
@@ -130,6 +152,14 @@ const LeadsPipelinePage = () => {
             [name]: value,
         }));
     };
+
+    const handleUpdateLeadInputChange = (e) => {
+        const { name, value } = e.target;
+        setUpdateLead((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    }
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
@@ -166,7 +196,7 @@ const LeadsPipelinePage = () => {
                                                         <a href="#">{lead.title}</a>
                                                         {activeLeadId === lead.id && (
                                                             <div className="leadcard-menu" ref={leadcardMenuRef}>
-                                                                <div className="leadcard-menu-btn btn-update">Обновить</div>
+                                                                <div className="leadcard-menu-btn btn-update" onClick={() => handleClickUpdateLead(lead)}>Обновить</div>
                                                                 <div className="leadcard-menu-btn btn-delete" onClick={() => deleteLead(lead.id)}>Удалить</div>
                                                             </div>
                                                         )}
@@ -267,6 +297,96 @@ const LeadsPipelinePage = () => {
                             <div className="form-actions">
                                 <button className="btn btn-primary">Создать</button>
                                 <button className="btn btn-cancel" onClick={cancelCreateLead}>Отмена</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            )}
+
+            {updateLead && (
+                <div className="create-lead-panel">
+                    <div className="create-lead-header">
+                        <h3>Обновление сделки</h3>
+                        <div className="close-icon" onClick={cancelUpdateLead}>×</div>
+                    </div>
+                    <form onSubmit={submitUpdateLead}>
+                        <div className="create-lead-body">
+                            <div className="form-group">
+                                <label>Название лида</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Введите название"
+                                    name='title'
+                                    value={updateLead.title}
+                                    onChange={handleUpdateLeadInputChange}
+                                    required
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label>ФИО</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Введите ФИО"
+                                    name='fullname'
+                                    value={updateLead.fullname}
+                                    onChange={handleUpdateLeadInputChange}
+                                    required
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label>Телефон</label>
+                                <input
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="Введите телефон"
+                                    name='phone'
+                                    value={updateLead.phone}
+                                    onChange={handleUpdateLeadInputChange}
+                                    required
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label>Email</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Введите email"
+                                    name='email'
+                                    value={updateLead.email}
+                                    onChange={handleUpdateLeadInputChange}
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label>Статус</label>
+                                <select className="form-control" name='status_id' value={updateLead.status_id} onChange={handleUpdateLeadInputChange} required>
+                                    <option value='' disabled>Выберите статус</option>
+                                    {statuses.map(status => (
+                                        <option key={status.id} value={status.id}>{status.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="form-group">
+                                <label>Описание</label>
+                                <textarea
+                                    className="form-control"
+                                    rows="4"
+                                    placeholder="Добавьте описание"
+                                    name='description'
+                                    value={updateLead.description}
+                                    onChange={handleUpdateLeadInputChange}
+                                ></textarea>
+                            </div>
+
+                            <div className="form-actions">
+                                <button className="btn btn-primary">Обновить</button>
+                                <button className="btn btn-cancel" onClick={cancelUpdateLead}>Отмена</button>
                             </div>
                         </div>
                     </form>
