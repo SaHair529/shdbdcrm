@@ -63,18 +63,6 @@
                         /*color: white;*/
                     }
                 }
-                .btn-success {
-                    background-color: #f2fff2;
-                    &:hover {
-                        background-color: #c0fdc0;
-                    }
-                }
-                .btn-fail {
-                    background-color: #ffffe9;
-                    &:hover {
-                        background-color: #ffff86;
-                    }
-                }
                 .btn-update {
                     background-color: #e9e9ff;
                     &:hover {

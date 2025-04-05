@@ -166,8 +166,6 @@ const LeadsPipelinePage = () => {
                                                         <a href="#">{lead.title}</a>
                                                         {activeLeadId === lead.id && (
                                                             <div className="leadcard-menu" ref={leadcardMenuRef}>
-                                                                <div className="leadcard-menu-btn btn-success">Реализовано</div>
-                                                                <div className="leadcard-menu-btn btn-fail">Не реализовано</div>
                                                                 <div className="leadcard-menu-btn btn-update">Обновить</div>
                                                                 <div className="leadcard-menu-btn btn-delete" onClick={() => deleteLead(lead.id)}>Удалить</div>
                                                             </div>
