@@ -9,7 +9,15 @@ const LeadsPipelinePage = () => {
     const [leads, setLeads] = useState({});
     const [activeLeadId, setActiveLeadId] = useState(null);
     const leadcardMenuRef = useRef(null);
-    const [newLead, setNewLead] = useState(null)
+    const [openNewLeadForm, setOpenNewLeadForm] = useState(false);
+    const [newLead, setNewLead] = useState({
+        title: "",
+        fullname: "",
+        phone: "",
+        email: "",
+        status_id: "",
+        description: "",
+    })
 
     useClickOutside(leadcardMenuRef, () => setActiveLeadId(null));
 
@@ -74,6 +82,46 @@ const LeadsPipelinePage = () => {
         }
     }
 
+    const submitCreateLead = async (e) => {
+        e.preventDefault()
+        api.post('/lead/', newLead)
+            .then((response) => {
+                if (response.status === 201) {
+                    fetchStatusesAndLeads()
+                }
+            })
+
+        setNewLead({
+            title: "",
+            fullname: "",
+            phone: "",
+            email: "",
+            status_id: "",
+            description: "",
+        })
+        setOpenNewLeadForm(false)
+    }
+
+    const cancelCreateLead = async (e) => {
+        setNewLead({
+            title: "",
+            fullname: "",
+            phone: "",
+            email: "",
+            status_id: "",
+            description: "",
+        })
+        setOpenNewLeadForm(false)
+    }
+
+    const handleCreateLeadInputChange = (e) => {
+        const { name, value } = e.target;
+        setNewLead((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+
     return (
         <DragDropContext onDragEnd={onDragEnd}>
             <div className="container-fluid">
@@ -92,7 +140,7 @@ const LeadsPipelinePage = () => {
                                         {...provided.droppableProps}
                                     >
                                         {index === 0 && (
-                                            <div className='add-lead-button' onClick={() => setNewLead({})}>
+                                            <div className='add-lead-button' onClick={() => setOpenNewLeadForm(true)}>
                                                 Новый лид
                                             </div>
                                         )}
@@ -128,78 +176,93 @@ const LeadsPipelinePage = () => {
                     ))}
                 </div>
             </div>
-            {newLead && (
+            {openNewLeadForm && (
                 <div className="create-lead-panel">
                     <div className="create-lead-header">
                         <h3>Создание нового лида</h3>
-                        <div className="close-icon" onClick={() => setNewLead(null)}>×</div>
+                        <div className="close-icon" onClick={cancelCreateLead}>×</div>
                     </div>
+                    <form onSubmit={submitCreateLead}>
+                        <div className="create-lead-body">
+                            <div className="form-group">
+                                <label>Название лида</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Введите название"
+                                    name='title'
+                                    value={newLead.title}
+                                    onChange={handleCreateLeadInputChange}
+                                    required
+                                />
+                            </div>
 
-                    <div className="create-lead-body">
-                        <div className="form-group">
-                            <label>Название лида</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Введите название"
-                                name='title'
-                            />
-                        </div>
+                            <div className="form-group">
+                                <label>ФИО</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Введите ФИО"
+                                    name='fullname'
+                                    value={newLead.fullname}
+                                    onChange={handleCreateLeadInputChange}
+                                    required
+                                />
+                            </div>
 
-                        <div className="form-group">
-                            <label>ФИО</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Введите ФИО"
-                                name='fullname'
-                            />
-                        </div>
+                            <div className="form-group">
+                                <label>Телефон</label>
+                                <input
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="Введите телефон"
+                                    name='phone'
+                                    value={newLead.phone}
+                                    onChange={handleCreateLeadInputChange}
+                                    required
+                                />
+                            </div>
 
-                        <div className="form-group">
-                            <label>Телефон</label>
-                            <input
-                                type="number"
-                                className="form-control"
-                                placeholder="Введите телефон"
-                                name='phone'
-                            />
-                        </div>
+                            <div className="form-group">
+                                <label>Email</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Введите email"
+                                    name='email'
+                                    value={newLead.email}
+                                    onChange={handleCreateLeadInputChange}
+                                />
+                            </div>
 
-                        <div className="form-group">
-                            <label>Email</label>
-                            <input
-                                type="number"
-                                className="form-control"
-                                placeholder="Введите email"
-                                name='email'
-                            />
-                        </div>
+                            <div className="form-group">
+                                <label>Статус</label>
+                                <select className="form-control" name='status_id' value={newLead.status_id} onChange={handleCreateLeadInputChange} required>
+                                    <option value='' disabled>Выберите статус</option>
+                                    {statuses.map(status => (
+                                        <option key={status.id} value={status.id}>{status.name}</option>
+                                    ))}
+                                </select>
+                            </div>
 
-                        <div className="form-group">
-                            <label>Статус</label>
-                            <select className="form-control" name='status'>
-                                {statuses.map(status => (
-                                    <option key={status.id} value={status.id}>{status.name}</option>
-                                ))}
-                            </select>
-                        </div>
+                            <div className="form-group">
+                                <label>Описание</label>
+                                <textarea
+                                    className="form-control"
+                                    rows="4"
+                                    placeholder="Добавьте описание"
+                                    name='description'
+                                    value={newLead.description}
+                                    onChange={handleCreateLeadInputChange}
+                                ></textarea>
+                            </div>
 
-                        <div className="form-group">
-                            <label>Описание</label>
-                            <textarea
-                                className="form-control"
-                                rows="4"
-                                placeholder="Добавьте описание"
-                                name='description'
-                            ></textarea>
+                            <div className="form-actions">
+                                <button className="btn btn-primary">Создать</button>
+                                <button className="btn btn-cancel" onClick={cancelCreateLead}>Отмена</button>
+                            </div>
                         </div>
-
-                        <div className="form-actions">
-                            <button className="btn btn-primary">Создать</button>
-                            <button className="btn btn-cancel">Отмена</button>
-                        </div>
-                    </div>
+                    </form>
                 </div>
             )}
         </DragDropContext>
