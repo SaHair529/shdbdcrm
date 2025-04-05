@@ -179,9 +179,9 @@ const LeadsPipelinePage = () => {
                         <div className="form-group">
                             <label>Статус</label>
                             <select className="form-control" name='status'>
-                                <option>Первичный контакт</option>
-                                <option>Переговоры</option>
-                                <option>В работе</option>
+                                {statuses.map(status => (
+                                    <option key={status.id} value={status.id}>{status.name}</option>
+                                ))}
                             </select>
                         </div>
 
