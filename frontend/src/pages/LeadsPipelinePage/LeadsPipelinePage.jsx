@@ -82,6 +82,15 @@ const LeadsPipelinePage = () => {
         }
     }
 
+    const deleteLead = (id) => {
+        api.delete(`/lead/${id}`)
+            .then(response => {
+                if (response.status === 204) {
+                    fetchStatusesAndLeads()
+                }
+            })
+    }
+
     const submitCreateLead = async (e) => {
         e.preventDefault()
         api.post('/lead/', newLead)
@@ -160,7 +169,7 @@ const LeadsPipelinePage = () => {
                                                                 <div className="leadcard-menu-btn btn-success">Реализовано</div>
                                                                 <div className="leadcard-menu-btn btn-fail">Не реализовано</div>
                                                                 <div className="leadcard-menu-btn btn-update">Обновить</div>
-                                                                <div className="leadcard-menu-btn btn-delete">Удалить</div>
+                                                                <div className="leadcard-menu-btn btn-delete" onClick={() => deleteLead(lead.id)}>Удалить</div>
                                                             </div>
                                                         )}
                                                     </div>
