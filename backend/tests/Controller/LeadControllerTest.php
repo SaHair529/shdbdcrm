@@ -119,6 +119,33 @@ class LeadControllerTest extends WebTestCase
         $this->assertEquals($requestData['status_id'], $lead->getStatus()->getId());
     }
 
+    public function testDelete(): void
+    {
+        $status = new Status();
+        $status->setName('Test Status')
+            ->setColor('black');
+
+        $lead = new Lead();
+        $lead->setTitle('Test Lead');
+        $lead->setFullname('Test Lead');
+        $lead->setEmail('test@test.com');
+        $lead->setPhone('0123456789');
+        $lead->setstatus($status);
+
+        $this->em->persist($lead);
+        $this->em->flush();
+
+        $leadId = $lead->getId();
+
+        $this->client->request('DELETE', "/lead/{$leadId}");
+
+        $response = $this->client->getResponse();
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
+
+        $lead = $this->em->getRepository(Lead::class)->find($leadId);
+        $this->assertNull($lead);
+    }
+
     public function tearDown(): void
     {
         $statuses = $this->em->getRepository(Status::class)->findAll();

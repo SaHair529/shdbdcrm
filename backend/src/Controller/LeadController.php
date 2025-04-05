@@ -89,4 +89,15 @@ class LeadController extends AbstractController
 
         return $this->json(null, Response::HTTP_CREATED);
     }
+
+    #[Route('/{id}', methods: ['DELETE'])]
+    public function delete(int $id): JsonResponse
+    {
+        $lead = $this->em->getRepository(Lead::class)->find($id);
+
+        $this->em->remove($lead);
+        $this->em->flush();
+
+        return $this->json(null, Response::HTTP_NO_CONTENT);
+    }
 }
