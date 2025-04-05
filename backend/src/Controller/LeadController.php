@@ -38,12 +38,28 @@ class LeadController extends AbstractController
         }
 
         $requestData = json_decode($request->getContent(), true);
-        if (isset($requestData['status_id'])) {
+
+        if (isset($requestData['title']) && $requestData['title'])
+            $lead->setTitle($requestData['title']);
+
+        if (isset($requestData['fullname']) && $requestData['fullname'])
+            $lead->setFullname($requestData['fullname']);
+
+        if (isset($requestData['phone']) && $requestData['phone'])
+            $lead->setPhone($requestData['phone']);
+
+        if (isset($requestData['email']) && $requestData['email'])
+            $lead->setEmail($requestData['email']);
+
+        if (isset($requestData['status_id']) && $requestData['status_id']) {
             $status = $this->em->getRepository(Status::class)->find($requestData['status_id']);
             if ($status) {
                 $lead->setStatus($status);
             }
         }
+
+        if (isset($requestData['description']) && $requestData['description'])
+            $lead->setDescription($requestData['description']);
 
         $this->em->persist($lead);
         $this->em->flush();
