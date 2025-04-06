@@ -13,6 +13,38 @@
             padding: 20px 0;
             border-bottom: 2px solid;
             margin-bottom: 5px;
+
+            position: relative;
+            .add-before, .add-after {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                cursor: pointer;
+                display: none;
+
+                justify-content: center;
+                align-items: center;
+                width: 25px;
+                height: 25px;
+                color: #fff;
+                background-color: #79a6c3;
+                border-radius: 50%;
+            }
+            .add-before {
+                left: 0;
+            }
+            .add-after {
+                right: 0;
+            }
+            .add-after:hover, .add-before:hover {
+                background-color: #597e91;
+            }
+
+            &:hover {
+                .add-before, .add-after {
+                    display: flex;
+                }
+            }
         }
         .status__body {
             min-height: 100px;

@@ -168,7 +168,9 @@ const LeadsPipelinePage = () => {
                     {statuses.map((status, index) => (
                         <div className="status" key={status.id}>
                             <div className="status__title" style={{borderColor: status.color}}>
+                                <div className="add-before">+</div>
                                 {status.name}
+                                <div className="add-after">+</div>
                             </div>
                             {/* Перенос Droppable на status__body */}
                             <Droppable droppableId={status.id}>
