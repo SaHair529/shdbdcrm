@@ -32,6 +32,9 @@ class Status
     #[ORM\OneToMany(targetEntity: Lead::class, mappedBy: 'status', cascade: ['remove'])]
     private Collection $leads;
 
+    #[ORM\Column(unique: true)]
+    private ?int $index = null;
+
     public function __construct()
     {
         $this->leads = new ArrayCollection();
@@ -92,6 +95,18 @@ class Status
                 $lead->setStatus(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIndex(): ?int
+    {
+        return $this->index;
+    }
+
+    public function setIndex(int $index): static
+    {
+        $this->index = $index;
 
         return $this;
     }

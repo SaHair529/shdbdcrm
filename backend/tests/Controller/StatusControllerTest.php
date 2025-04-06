@@ -22,7 +22,8 @@ class StatusControllerTest extends WebTestCase
     {
         $status = new Status();
         $status->setName('Test Status')
-            ->setColor('black');
+            ->setColor('black')
+            ->setIndex(1);
         $this->em->persist($status);
         $this->em->flush();
 

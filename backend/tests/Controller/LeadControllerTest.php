@@ -24,7 +24,8 @@ class LeadControllerTest extends WebTestCase
     {
         $status = new Status();
         $status->setName('Test Status')
-            ->setColor('black');
+            ->setColor('black')
+            ->setIndex(1);
 
         $lead = new Lead();
         $lead->setTitle('Test Lead')
@@ -61,10 +62,12 @@ class LeadControllerTest extends WebTestCase
     {
         $status1 = new Status();
         $status1->setName('status1')
-            ->setColor('black');
+            ->setColor('black')
+            ->setIndex(2);
         $status2 = new Status();
         $status2->setName('status2')
-            ->setColor('white');
+            ->setColor('white')
+            ->setIndex(3);
 
         $lead = new Lead();
         $lead->setTitle('Test Lead')
@@ -94,7 +97,8 @@ class LeadControllerTest extends WebTestCase
     {
         $status = new Status();
         $status->setName('Test Status')
-            ->setColor('black');
+            ->setColor('black')
+            ->setIndex(4);
 
         $this->em->persist($status);
         $this->em->flush();
@@ -123,7 +127,8 @@ class LeadControllerTest extends WebTestCase
     {
         $status = new Status();
         $status->setName('Test Status')
-            ->setColor('black');
+            ->setColor('black')
+            ->setIndex(5);
 
         $lead = new Lead();
         $lead->setTitle('Test Lead');
