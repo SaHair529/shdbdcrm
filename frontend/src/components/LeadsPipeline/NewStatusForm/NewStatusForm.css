@@ -2,11 +2,29 @@
     padding: 20px 10px;
     margin-bottom: 5px;
     width: 315px;
+    text-align: center;
+
+    label {
+        margin: 0 auto;
+    }
 
     input {
         border: none;
         background: transparent;
         outline: none;
         text-align: center;
+    }
+
+    input[type=color] {
+        padding: 0;
+        height: 30px;
+        width: 30px;
+        border-radius: 50%;
+        margin: 0 auto;
+        cursor: pointer;
+    }
+
+    button {
+        text-align: right;
     }
 }

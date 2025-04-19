@@ -12,6 +12,26 @@ const NewStatusForm = () => {
                     name='name'
                     required
                 />
+
+                <hr/>
+
+                <div className="form-group">
+                    <label>Выберите цвет статуса</label>
+                    <input
+                        className="form-control"
+                        id='new-status-color'
+                        type="color"
+                        name='color'
+                        required
+                    />
+                </div>
+
+                <hr/>
+
+                <div className="form-actions">
+                    <button className="btn btn-outline-primary">Сохранить</button>
+                    <button className="btn btn-cancel">Отмена</button>
+                </div>
             </form>
         </div>
     )
