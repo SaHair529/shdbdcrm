@@ -1,0 +1,12 @@
+.new-status-form {
+    padding: 20px 10px;
+    margin-bottom: 5px;
+    width: 315px;
+
+    input {
+        border: none;
+        background: transparent;
+        outline: none;
+        text-align: center;
+    }
+}
