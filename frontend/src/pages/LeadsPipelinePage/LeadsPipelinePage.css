@@ -13,6 +13,7 @@
             padding: 20px 0;
             border-bottom: 2px solid;
             margin-bottom: 5px;
+            cursor: not-allowed;
 
             position: relative;
             .add-before, .add-after {

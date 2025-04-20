@@ -174,6 +174,21 @@ const LeadsPipelinePage = () => {
         setNewStatusIndex(status.index+1)
     }
 
+    const deleteStatus = (id, e) => {
+        if (e.target.classList.contains('add-before') || e.target.classList.contains('add-after'))
+            return
+
+        const isConfirmed = window.confirm("Вы уверены, что хотите удалить данный статус?")
+        if (isConfirmed) {
+            api.delete(`/status/${id}`)
+            .then(response => {
+                if (response.status === 204) {
+                    fetchStatusesAndLeads()
+                }
+            })
+        }
+    }
+
     return (
         <DragDropContext onDragEnd={onDragEnd}>
             <div className="container-fluid">
@@ -184,7 +199,7 @@ const LeadsPipelinePage = () => {
                     {statuses.map((status, index) => (
                         <>
                             <div className="status" key={status.id}>
-                                <div className="status__title" style={{borderColor: status.color}}>
+                                <div className="status__title" onClick={e => {deleteStatus(status.id, e)}} style={{borderColor: status.color}}>
                                     <div className="add-before" onClick={() => onAddStatusBeforeClick(index)}>+</div>
                                     {status.name}
                                     <div className="add-after" onClick={() => onAddStatusAfterClick(status)}>+</div>
