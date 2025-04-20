@@ -178,11 +178,11 @@ const LeadsPipelinePage = () => {
         <DragDropContext onDragEnd={onDragEnd}>
             <div className="container-fluid">
                 <div className="pipeline">
+                    {newStatusIndex !== null && newStatusIndex === 0 && (
+                        <NewStatusForm index={newStatusIndex} setNewStatusIndex={setNewStatusIndex} fetchStatusesAndLeads={fetchStatusesAndLeads} />
+                    )}
                     {statuses.map((status, index) => (
                         <>
-                            {newStatusIndex !== null && status.index - newStatusIndex === 1 && (
-                                <NewStatusForm index={newStatusIndex} setNewStatusIndex={setNewStatusIndex} fetchStatusesAndLeads={fetchStatusesAndLeads} />
-                            )}
                             <div className="status" key={status.id}>
                                 <div className="status__title" style={{borderColor: status.color}}>
                                     <div className="add-before" onClick={() => onAddStatusBeforeClick(index)}>+</div>
