@@ -4,6 +4,10 @@
     width: 315px;
     text-align: center;
 
+    form {
+        width: 315px;
+    }
+
     label {
         margin: 0 auto;
     }
