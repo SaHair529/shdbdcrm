@@ -15,6 +15,7 @@ const NewStatusForm = ({index, fetchStatusesAndLeads, setNewStatusIndex}) => {
         })
             .then(response => {
                 if (response.status === 201) {
+                    setNewStatusIndex(null)
                     fetchStatusesAndLeads()
                 }
             })
