@@ -21,7 +21,7 @@ class StatusController extends AbstractController
     #[Route('/', methods: ['GET'])]
     public function list(): JsonResponse
     {
-        $statuses = $this->em->getRepository(Status::class)->findAll();
+        $statuses = $this->em->getRepository(Status::class)->findBy([], ['index' => 'ASC']);
 
         return $this->json($statuses, Response::HTTP_OK, [], ['groups' => 'status_compact']);
     }
@@ -30,10 +30,9 @@ class StatusController extends AbstractController
     public function create(Request $request): JsonResponse
     {
         $requestData = json_decode($request->getContent(), true);
-
         if (
             !isset($requestData['name'], $requestData['color'], $requestData['index']) ||
-            !$requestData['name'] || !$requestData['color'] || !$requestData['index']
+            !$requestData['name'] || !$requestData['color']
         )
         {
             return $this->json([
