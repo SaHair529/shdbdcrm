@@ -33,6 +33,7 @@ class Status
     private Collection $leads;
 
     #[ORM\Column(unique: true)]
+    #[Groups(['status_compact'])]
     private ?int $index = null;
 
     public function __construct()
