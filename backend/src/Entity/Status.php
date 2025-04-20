@@ -32,7 +32,7 @@ class Status
     #[ORM\OneToMany(targetEntity: Lead::class, mappedBy: 'status', cascade: ['remove'])]
     private Collection $leads;
 
-    #[ORM\Column(unique: true)]
+    #[ORM\Column(unique: false)]
     #[Groups(['status_compact'])]
     private ?int $index = null;
 
