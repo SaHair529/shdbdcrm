@@ -2,3 +2,26 @@ body {
     background-color: #f5f5f5;
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+/* Основной контейнер */
+::-webkit-scrollbar {
+    width: 3px; /* Ширина вертикального скроллбара */
+    height: 3px; /* Высота горизонтального скроллбара */
+}
+
+/* Дорожка скроллбара (фон) */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px;
+}
+
+/* Ползунок (движущаяся часть) */
+::-webkit-scrollbar-thumb {
+    background: #1B3446;
+    border-radius: 5px;
+}
+
+/* Ползунок при наведении */
+::-webkit-scrollbar-thumb:hover {
+    background: #007bff;
+}
