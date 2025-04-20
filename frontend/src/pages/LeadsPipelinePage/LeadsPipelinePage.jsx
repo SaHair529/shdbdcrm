@@ -3,6 +3,7 @@ import './LeadsPipelinePage.css'
 import useClickOutside from "../../components/useClickOutside"
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd'
 import api from "../../components/api";
+import NewStatusForm from "../../components/LeadsPipeline/NewStatusForm/NewStatusForm";
 
 const LeadsPipelinePage = () => {
     const [statuses, setStatuses] = useState([]);
@@ -19,6 +20,7 @@ const LeadsPipelinePage = () => {
         description: "",
     })
     const [updateLead, setUpdateLead] = useState(null);
+    const [newStatusIndex, setNewStatusIndex] = useState(null)
 
     useClickOutside(leadcardMenuRef, () => setActiveLeadId(null));
 
@@ -161,57 +163,76 @@ const LeadsPipelinePage = () => {
         }));
     }
 
+    const onAddStatusBeforeClick = (index) => {
+        if (!statuses[index-1])
+            setNewStatusIndex(0)
+        else
+            setNewStatusIndex(statuses[index-1].index+1)
+    }
+
+    const onAddStatusAfterClick = (status) => {
+        setNewStatusIndex(status.index+1)
+    }
+
     return (
         <DragDropContext onDragEnd={onDragEnd}>
             <div className="container-fluid">
                 <div className="pipeline">
                     {statuses.map((status, index) => (
-                        <div className="status" key={status.id}>
-                            <div className="status__title" style={{borderColor: status.color}}>
-                                <div className="add-before">+</div>
-                                {status.name}
-                                <div className="add-after">+</div>
+                        <>
+                            {newStatusIndex !== null && status.index - newStatusIndex === 1 && (
+                                <NewStatusForm index={newStatusIndex} setNewStatusIndex={setNewStatusIndex} fetchStatusesAndLeads={fetchStatusesAndLeads} />
+                            )}
+                            <div className="status" key={status.id}>
+                                <div className="status__title" style={{borderColor: status.color}}>
+                                    <div className="add-before" onClick={() => onAddStatusBeforeClick(index)}>+</div>
+                                    {status.name}
+                                    <div className="add-after" onClick={() => onAddStatusAfterClick(status)}>+</div>
+                                </div>
+                                {/* Перенос Droppable на status__body */}
+                                <Droppable droppableId={status.id}>
+                                    {(provided, snapshot) => (
+                                        <div
+                                            className={`status__body ${snapshot.isDraggingOver ? 'dragging-over' : ''}`}
+                                            ref={provided.innerRef}
+                                            {...provided.droppableProps}
+                                        >
+                                            {index === 0 && (
+                                                <div className='add-lead-button' onClick={() => setOpenNewLeadForm(true)}>
+                                                    Новый лид
+                                                </div>
+                                            )}
+                                            {leads[status.id] && leads[status.id].map((lead, leadIndex) => (
+                                                <Draggable draggableId={lead.id} index={leadIndex} key={lead.id}>
+                                                    {(provided, snapshot) => (
+                                                        <div
+                                                            className={`lead-card ${snapshot.isDragging ? 'dragging' : ''}`}
+                                                            ref={provided.innerRef}
+                                                            {...provided.draggableProps}
+                                                            {...provided.dragHandleProps}
+                                                            onClick={() => setActiveLeadId(activeLeadId === lead.id ? null : lead.id)}
+                                                        >
+                                                            <a href="#">{lead.title}</a>
+                                                            {activeLeadId === lead.id && (
+                                                                <div className="leadcard-menu" ref={leadcardMenuRef}>
+                                                                    <div className="leadcard-menu-btn btn-update" onClick={() => handleClickUpdateLead(lead)}>Обновить</div>
+                                                                    <div className="leadcard-menu-btn btn-delete" onClick={() => deleteLead(lead.id)}>Удалить</div>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </Draggable>
+                                            ))}
+                                            {/* Индикатор места вставки */}
+                                            {provided.placeholder}
+                                        </div>
+                                    )}
+                                </Droppable>
                             </div>
-                            {/* Перенос Droppable на status__body */}
-                            <Droppable droppableId={status.id}>
-                                {(provided, snapshot) => (
-                                    <div
-                                        className={`status__body ${snapshot.isDraggingOver ? 'dragging-over' : ''}`}
-                                        ref={provided.innerRef}
-                                        {...provided.droppableProps}
-                                    >
-                                        {index === 0 && (
-                                            <div className='add-lead-button' onClick={() => setOpenNewLeadForm(true)}>
-                                                Новый лид
-                                            </div>
-                                        )}
-                                        {leads[status.id] && leads[status.id].map((lead, leadIndex) => (
-                                            <Draggable draggableId={lead.id} index={leadIndex} key={lead.id}>
-                                                {(provided, snapshot) => (
-                                                    <div
-                                                        className={`lead-card ${snapshot.isDragging ? 'dragging' : ''}`}
-                                                        ref={provided.innerRef}
-                                                        {...provided.draggableProps}
-                                                        {...provided.dragHandleProps}
-                                                        onClick={() => setActiveLeadId(activeLeadId === lead.id ? null : lead.id)}
-                                                    >
-                                                        <a href="#">{lead.title}</a>
-                                                        {activeLeadId === lead.id && (
-                                                            <div className="leadcard-menu" ref={leadcardMenuRef}>
-                                                                <div className="leadcard-menu-btn btn-update" onClick={() => handleClickUpdateLead(lead)}>Обновить</div>
-                                                                <div className="leadcard-menu-btn btn-delete" onClick={() => deleteLead(lead.id)}>Удалить</div>
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                )}
-                                            </Draggable>
-                                        ))}
-                                        {/* Индикатор места вставки */}
-                                        {provided.placeholder}
-                                    </div>
-                                )}
-                            </Droppable>
-                        </div>
+                            {newStatusIndex !== null && newStatusIndex - status.index === 1 && (
+                                <NewStatusForm index={newStatusIndex} setNewStatusIndex={setNewStatusIndex} fetchStatusesAndLeads={fetchStatusesAndLeads} />
+                            )}
+                        </>
                     ))}
                 </div>
             </div>
