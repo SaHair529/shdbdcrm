@@ -26,13 +26,23 @@ class StatusController extends AbstractController
         return $this->json($statuses, Response::HTTP_OK, [], ['groups' => 'status_compact']);
     }
 
+    #[Route('/{id<\d+>}', methods: ['DELETE'])]
+    public function delete(int $id): JsonResponse
+    {
+        $status = $this->em->getRepository(Status::class)->find($id);
+
+        $this->em->remove($status);
+        $this->em->flush();
+
+        return $this->json(null, Response::HTTP_NO_CONTENT);
+    }
+
     #[Route('/', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         $requestData = json_decode($request->getContent(), true);
         if (
-            !isset($requestData['name'], $requestData['color'], $requestData['index']) ||
-            !$requestData['name'] || !$requestData['color']
+            !isset($requestData['name'], $requestData['color'], $requestData['index'])
         )
         {
             return $this->json([
@@ -49,8 +59,9 @@ class StatusController extends AbstractController
             ->getQuery()
             ->getResult();
 
+        $i = $requestData['index'];
         foreach ($statuses as $status) {
-            $status->setIndex($status->getIndex()+1);
+            $status->setIndex(++$i);
             $this->em->persist($status);
         }
         $this->em->flush();
