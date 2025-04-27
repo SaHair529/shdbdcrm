@@ -6,6 +6,7 @@ import api from "../../components/api";
 import NewStatusForm from "../../components/LeadsPipeline/NewStatusForm/NewStatusForm";
 
 const LeadsPipelinePage = () => {
+    const [searchParams, setSearchParams] = useState(new URLSearchParams(window.location.search))
     const [statuses, setStatuses] = useState([]);
     const [leads, setLeads] = useState({});
     const [activeLeadId, setActiveLeadId] = useState(null);
@@ -55,6 +56,19 @@ const LeadsPipelinePage = () => {
     useEffect(() => {
         fetchStatusesAndLeads()
     }, [])
+
+    useEffect(() => {
+        const leadId = searchParams.get('lead_id');
+        if (leadId) {
+            for (const statusId in leads) {
+                const foundLead = leads[statusId].find(lead => lead.id === leadId);
+                if (foundLead) {
+                    handleClickUpdateLead(foundLead);
+                    break;
+                }
+            }
+        }
+    }, [leads]);
 
     const fetchStatusesAndLeads = async () => {
         try {
@@ -129,10 +143,21 @@ const LeadsPipelinePage = () => {
     const handleClickUpdateLead = (lead) => {
         lead.status_id = lead.status.id
         setUpdateLead(lead)
+
+        const url = new URL(window.location.href)
+        searchParams.set('lead_id', lead.id)
+        url.search = searchParams.toString()
+        window.history.pushState(null, '', url)
     }
 
     const cancelUpdateLead = () => {
         setUpdateLead(null)
+
+
+        const url = new URL(window.location.href)
+        searchParams.delete('lead_id')
+        url.search = searchParams.toString()
+        window.history.pushState(null, '', url)
     }
 
     const submitUpdateLead = (e) => {
