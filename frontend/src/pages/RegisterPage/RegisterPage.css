@@ -1,0 +1,17 @@
+.fullscreen-form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+    .form-wrapper {
+        max-width: 500px;
+        width: 90%;
+        label {
+            color: slategray;
+        }
+        button {
+            width: 100%;
+        }
+    }
+}
