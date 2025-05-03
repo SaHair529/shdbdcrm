@@ -13,5 +13,11 @@
         button {
             width: 100%;
         }
+        .input-error {
+            color: #e10909;
+            padding: 5px 10px;
+            background-color: #f6eaea;
+            text-align: center;
+        }
     }
 }

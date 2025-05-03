@@ -1,15 +1,55 @@
-import React from "react"
+import React, {useState} from "react"
 import "./RegisterPage.css"
 import {Link} from "react-router-dom";
+import api from "../../components/api";
 
 
 const RegisterPage = () => {
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+    const [passwordRepeat, setPasswordRepeat] = useState('')
+    const [fullname, setFullname] = useState('')
+    const [usernameError, setUsernameError] = useState('')
+    const [passwordRepeatError, setPasswordRepeatError] = useState('')
+    const [serverError, setServerError] = useState('')
+
+    const validatePasswordMatch = () => {
+        if (password !== passwordRepeat) {
+            setPasswordRepeatError('Пароли не совпадают')
+        }
+        else setPasswordRepeatError('')
+    }
+
+    const submit = async (e) => {
+        e.preventDefault()
+        const isFormValid = await validateForm()
+        if (!isFormValid)
+            return
+
+        const response = await api.post('/register', {username, password, fullname})
+            .catch((error) => {
+                if (error.response.status === 409) {
+                    setUsernameError('Пользователь с таким логином уже существует')
+                }
+                else {
+                    setServerError('Возникла ошибка, повторите попытку позже')
+                }
+            })
+    }
+
+    const validateForm = async () => {
+        if (passwordRepeat !== password)
+            return false
+
+        return true
+    }
+
     return (
         <div className="fullscreen-form-container">
             <div className="form-wrapper">
                 <div className="form-wrapper__head"></div>
                 <div className="form-wrapper__body">
-                    <form className="register-form">
+                    <form className="register-form" onSubmit={submit}>
                         <div className="form-group">
                             <label>Логин</label>
                             <input
@@ -17,10 +57,15 @@ const RegisterPage = () => {
                                 className="form-control"
                                 placeholder="Введите логин"
                                 name='username'
-                                // value={newLead.title}
-                                // onChange={handleCreateLeadInputChange}
+                                value={username}
+                                onChange={e => setUsername(e.target.value)}
                                 required
                             />
+                            {usernameError && (
+                                <div className="input-error">
+                                    {usernameError}
+                                </div>
+                            )}
                         </div>
                         <div className="form-group">
                             <label>Пароль</label>
@@ -29,8 +74,9 @@ const RegisterPage = () => {
                                 className="form-control"
                                 placeholder="Введите пароль"
                                 name='password'
-                                // value={newLead.title}
-                                // onChange={handleCreateLeadInputChange}
+                                value={password}
+                                onChange={e => setPassword(e.target.value)}
+                                onBlur={() => validatePasswordMatch()}
                                 required
                             />
                         </div>
@@ -41,10 +87,16 @@ const RegisterPage = () => {
                                 className="form-control"
                                 placeholder="Повторите пароль"
                                 name='password-repeat'
-                                // value={newLead.title}
-                                // onChange={handleCreateLeadInputChange}
+                                value={passwordRepeat}
+                                onChange={e => setPasswordRepeat(e.target.value)}
+                                onBlur={() => validatePasswordMatch()}
                                 required
                             />
+                            {passwordRepeatError && (
+                                <div className="input-error">
+                                    {passwordRepeatError}
+                                </div>
+                            )}
                         </div>
                         <div className="form-group">
                             <label>ФИО</label>
@@ -53,8 +105,8 @@ const RegisterPage = () => {
                                 className="form-control"
                                 placeholder="Введите ФИО"
                                 name='fullname'
-                                // value={newLead.title}
-                                // onChange={handleCreateLeadInputChange}
+                                value={fullname}
+                                onChange={e => setFullname(e.target.value)}
                                 required
                             />
                         </div>
@@ -62,6 +114,11 @@ const RegisterPage = () => {
                         <div className="form-actions">
                             <button className="btn btn-primary">Зарегистрироваться</button>
                             <hr/>
+                            {serverError && (
+                                <div className="input-error">
+                                    {serverError}
+                                </div>
+                            )}
                             <p>Уже зарегистрированы? <Link to='/login'>Войти</Link></p>
                         </div>
                     </form>
