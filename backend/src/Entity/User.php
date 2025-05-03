@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -17,9 +18,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['user_minimal'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Groups(['user_minimal'])]
     private ?string $username = null;
 
     /**
@@ -39,6 +42,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: AccessToken::class, mappedBy: 'owner')]
     private Collection $accessTokens;
+
+    #[ORM\Column(length: 255)]
+    private ?string $fullname = null;
 
     public function __construct()
     {
@@ -146,6 +152,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $accessToken->setOwner(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getFullname(): ?string
+    {
+        return $this->fullname;
+    }
+
+    public function setFullname(string $fullname): static
+    {
+        $this->fullname = $fullname;
 
         return $this;
     }
