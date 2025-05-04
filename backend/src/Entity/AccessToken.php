@@ -101,4 +101,9 @@ class AccessToken
 
         return $this;
     }
+
+    public function isValid(): bool
+    {
+        return !$this->isRevoked && $this->expiresAt > new \DateTimeImmutable();
+    }
 }

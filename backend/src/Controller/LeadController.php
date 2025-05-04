@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Lead;
 use App\Entity\Status;
+use App\Entity\User;
 use App\Enum\ErrorCode;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -11,14 +12,20 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/lead')]
 class LeadController extends AbstractController
 {
-    public function __construct(private readonly EntityManagerInterface $em)
+    private ?User $user;
+
+    public function __construct(private readonly EntityManagerInterface $em, private TokenStorageInterface $tokenStorage)
     {
+        $this->user = $this->tokenStorage->getToken()?->getUser();
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/', methods: ['GET'])]
     public function list(): JsonResponse
     {
