@@ -3,8 +3,11 @@ import Menu from "./components/Menu";
 import LeadsPipelinePage from "./pages/LeadsPipelinePage/LeadsPipelinePage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
+import {useState} from "react";
 
 function App() {
+	const [userSessionData, setUserSessionData] = useState(JSON.parse(localStorage.getItem("userSessionData")));
+
 	return (
 		<div className="App" >
 			<Menu/>

@@ -1,15 +1,45 @@
-import React from "react"
+import React, {useState} from "react"
 import './../RegisterPage/RegisterPage.css'
-import {Link} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom"
+import api from "../../components/api"
 
 
 const LoginPage = () => {
+    const location = useLocation()
+    const successMessage = location.state?.successMessage
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+    const [loginError, setLoginError] = useState('')
+    const [isLoading, setIsLoading] = useState(false)
+
+    const submit = (e) => {
+        e.preventDefault()
+        setIsLoading(true)
+        setLoginError('')
+        api.post('/login', {username, password})
+            .then((response) => {
+                setIsLoading(false)
+                if (response.status === 200){
+                    localStorage.setItem('userSessionData', JSON.stringify(response.data))
+                }
+            })
+            .catch((error) => {
+                if (error.response?.status === 401) {
+                    setLoginError('Неверный логин или пароль')
+                } 
+                else {
+                    setLoginError('Возникла ошибка, повторите попытку позже')
+                }
+                setIsLoading(false)
+            })
+    }
+
     return (
         <div className="fullscreen-form-container">
             <div className="form-wrapper">
                 <div className="form-wrapper__head"></div>
                 <div className="form-wrapper__body">
-                    <form className="register-form">
+                    <form onSubmit={submit} className="register-form">
                         <div className="form-group">
                             <label>Логин</label>
                             <input
@@ -17,8 +47,8 @@ const LoginPage = () => {
                                 className="form-control"
                                 placeholder="Введите логин"
                                 name='username'
-                                // value={newLead.title}
-                                // onChange={handleCreateLeadInputChange}
+                                value={username}
+                                onChange={e => setUsername(e.target.value)}
                                 required
                             />
                         </div>
@@ -29,15 +59,20 @@ const LoginPage = () => {
                                 className="form-control"
                                 placeholder="Введите пароль"
                                 name='password'
-                                // value={newLead.title}
-                                // onChange={handleCreateLeadInputChange}
+                                value={password}
+                                onChange={e => setPassword(e.target.value)}
                                 required
                             />
                         </div>
-
                         <div className="form-actions">
-                            <button className="btn btn-primary">Войти</button>
+                            {isLoading ? (
+                                <div className="spinner"></div>
+                            ) : (
+                                <button className="btn btn-primary">Войти</button>
+                            )}
                             <hr/>
+                            {loginError && <div className="input-error">{loginError}</div>}
+                            {successMessage && <div className="input-success">{successMessage}</div>}
                             <p><Link to="/register">Регистрация</Link></p>
                         </div>
                     </form>

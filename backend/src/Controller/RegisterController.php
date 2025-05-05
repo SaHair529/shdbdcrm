@@ -43,6 +43,6 @@ final class RegisterController extends AbstractController
         $this->em->persist($user);
         $this->em->flush();
 
-        return $this->json(null);
+        return $this->json(null, Response::HTTP_CREATED);
     }
 }

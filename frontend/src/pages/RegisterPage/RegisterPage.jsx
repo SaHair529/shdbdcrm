@@ -1,10 +1,11 @@
 import React, {useState} from "react"
 import "./RegisterPage.css"
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import api from "../../components/api";
 
 
 const RegisterPage = () => {
+    const navigate = useNavigate()
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [passwordRepeat, setPasswordRepeat] = useState('')
@@ -12,6 +13,7 @@ const RegisterPage = () => {
     const [usernameError, setUsernameError] = useState('')
     const [passwordRepeatError, setPasswordRepeatError] = useState('')
     const [serverError, setServerError] = useState('')
+    const [isLoading, setIsLoading] = useState(false)
 
     const validatePasswordMatch = () => {
         if (password !== passwordRepeat) {
@@ -26,7 +28,16 @@ const RegisterPage = () => {
         if (!isFormValid)
             return
 
-        const response = await api.post('/register', {username, password, fullname})
+        setIsLoading(true)
+        api.post('/register', {username, password, fullname})
+            .then(response => {
+                setIsLoading(false)
+                if (response.status === 201) {
+                    navigate('/login', {
+                        state: { successMessage: 'Регистрация прошла успешно!' }
+                    })
+                }
+            })
             .catch((error) => {
                 if (error.response.status === 409) {
                     setUsernameError('Пользователь с таким логином уже существует')
@@ -34,6 +45,7 @@ const RegisterPage = () => {
                 else {
                     setServerError('Возникла ошибка, повторите попытку позже')
                 }
+                setIsLoading(false)
             })
     }
 
@@ -60,6 +72,7 @@ const RegisterPage = () => {
                                 value={username}
                                 onChange={e => setUsername(e.target.value)}
                                 required
+                                onBlur={() => setUsernameError('')}
                             />
                             {usernameError && (
                                 <div className="input-error">
@@ -112,7 +125,11 @@ const RegisterPage = () => {
                         </div>
 
                         <div className="form-actions">
-                            <button className="btn btn-primary">Зарегистрироваться</button>
+                            {isLoading ? (
+                                <div className="spinner"></div>
+                            ) : (
+                                <button className="btn btn-primary">Войти</button>
+                            )}
                             <hr/>
                             {serverError && (
                                 <div className="input-error">
