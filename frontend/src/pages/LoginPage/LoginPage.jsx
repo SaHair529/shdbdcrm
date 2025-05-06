@@ -1,25 +1,30 @@
 import React, {useState} from "react"
 import './../RegisterPage/RegisterPage.css'
-import {Link, useLocation} from "react-router-dom"
+import {Link, useLocation, useNavigate} from "react-router-dom"
 import api from "../../components/api"
+import { UserSessionContext } from "../../contexts/UserSessionContext"
 
 
 const LoginPage = () => {
+    const { userSessionData, setUserSessionData } = React.useContext(UserSessionContext)
     const location = useLocation()
     const successMessage = location.state?.successMessage
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [loginError, setLoginError] = useState('')
     const [isLoading, setIsLoading] = useState(false)
+    const navigate = useNavigate()
 
     const submit = (e) => {
         e.preventDefault()
+
         setIsLoading(true)
         setLoginError('')
         api.post('/login', {username, password})
             .then((response) => {
                 setIsLoading(false)
                 if (response.status === 200){
+                    setUserSessionData(response.data)
                     localStorage.setItem('userSessionData', JSON.stringify(response.data))
                 }
             })
@@ -33,6 +38,12 @@ const LoginPage = () => {
                 setIsLoading(false)
             })
     }
+
+    React.useEffect(() => {
+        if (userSessionData) {
+            navigate('/')
+        }
+    })
 
     return (
         <div className="fullscreen-form-container">

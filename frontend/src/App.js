@@ -3,22 +3,22 @@ import Menu from "./components/Menu";
 import LeadsPipelinePage from "./pages/LeadsPipelinePage/LeadsPipelinePage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
-import {useState} from "react";
+import { UserSessionProvider } from "./contexts/UserSessionContext";
 
 function App() {
-	const [userSessionData, setUserSessionData] = useState(JSON.parse(localStorage.getItem("userSessionData")));
-
 	return (
-		<div className="App" >
-			<Menu/>
-			<Router>
-				<Routes>
-					<Route path="/" exact element={<LeadsPipelinePage />} />
-					<Route path="/register" exact element={<RegisterPage />} />
-					<Route path="/login" exact element={<LoginPage />} />
-				</Routes>
-			</Router>
-		</div>
+		<UserSessionProvider>
+			<div className="App" >
+				<Menu/>
+				<Router>
+					<Routes>
+						<Route path="/" exact element={<LeadsPipelinePage />} />
+						<Route path="/register" exact element={<RegisterPage />} />
+						<Route path="/login" exact element={<LoginPage />} />
+					</Routes>
+				</Router>
+			</div>
+		</UserSessionProvider>
 	);
 }
 

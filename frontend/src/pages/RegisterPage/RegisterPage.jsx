@@ -2,9 +2,10 @@ import React, {useState} from "react"
 import "./RegisterPage.css"
 import {Link, useNavigate} from "react-router-dom";
 import api from "../../components/api";
-
+import { UserSessionContext } from "../../contexts/UserSessionContext"
 
 const RegisterPage = () => {
+    const { userSessionData, setUserSessionData } = React.useContext(UserSessionContext)
     const navigate = useNavigate()
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
@@ -55,6 +56,12 @@ const RegisterPage = () => {
 
         return true
     }
+
+    React.useEffect(() => {
+        if (userSessionData) {
+            navigate('/')
+        }
+    })
 
     return (
         <div className="fullscreen-form-container">
