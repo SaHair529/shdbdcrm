@@ -1,7 +1,15 @@
+import React, { useEffect } from 'react';
 import './Menu.css'
 import {FaSuitcase} from "react-icons/fa";
+import { UserSessionContext } from '../contexts/UserSessionContext';
 
 const Menu = () => {
+    const {userSessionData} = React.useContext(UserSessionContext)
+
+    if (!userSessionData) {
+        return null
+    }
+    
     return (
         <nav className="menu">
             <ul className="menu__list">
