@@ -4,8 +4,12 @@ import useClickOutside from "../../components/useClickOutside"
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd'
 import api from "../../components/api";
 import NewStatusForm from "../../components/LeadsPipeline/NewStatusForm/NewStatusForm";
+import { UserSessionContext } from "../../contexts/UserSessionContext"
+import { useNavigate } from "react-router-dom"
 
 const LeadsPipelinePage = () => {
+    const navigate = useNavigate()
+    const { userSessionData } = React.useContext(UserSessionContext)
     const [searchParams, setSearchParams] = useState(new URLSearchParams(window.location.search))
     const [statuses, setStatuses] = useState([]);
     const [leads, setLeads] = useState({});
@@ -54,6 +58,10 @@ const LeadsPipelinePage = () => {
     };
 
     useEffect(() => {
+        if (!userSessionData){
+            navigate('/login')
+            return
+        }
         fetchStatusesAndLeads()
     }, [])
 
@@ -72,7 +80,11 @@ const LeadsPipelinePage = () => {
 
     const fetchStatusesAndLeads = async () => {
         try {
-            let response = await api.get('/status/')
+            let response = await api.get('/status/', {
+                headers: {
+                    'Authorization': `Bearer ${userSessionData.accessToken}`
+                }
+            })
             response.data.map((status) => {
                 status['id'] = status['id'].toString()
             })
@@ -83,7 +95,11 @@ const LeadsPipelinePage = () => {
                 leadsObject[status['id']] = []
             })
 
-            response = await api.get('/lead/')
+            response = await api.get('/lead/', {
+                headers: {
+                    'Authorization': `Bearer ${userSessionData.accessToken}`
+                }
+            })
             response.data.map((lead) => {
                 if (!leadsObject[lead.status.id]) {
                     leadsObject[lead.status.id] = []
@@ -94,6 +110,10 @@ const LeadsPipelinePage = () => {
             setLeads(leadsObject)
         }
         catch(error) {
+            if (error.response?.status === 401) {
+                localStorage.removeItem('userSessionData')
+                navigate('/login')
+            }
             alert('Ошибка загрузки страницы. Обратитесь к разработчику')
             console.error(error)
         }
