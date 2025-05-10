@@ -55,6 +55,14 @@ const LeadsPipelinePage = () => {
         api.patch(`/lead/${lead.id}`, {
             status_id: destinationStatusId,
         })
+        .catch(error => {
+            if (error.response?.status === 401) {
+                localStorage.removeItem('userSessionData')
+                navigate('/login')
+            }
+            alert('Ошибка. Обратитесь к разработчику')
+            console.error(error)
+        })
     };
 
     useEffect(() => {
@@ -114,7 +122,7 @@ const LeadsPipelinePage = () => {
                 localStorage.removeItem('userSessionData')
                 navigate('/login')
             }
-            alert('Ошибка загрузки страницы. Обратитесь к разработчику')
+            alert('Ошибка. Обратитесь к разработчику')
             console.error(error)
         }
     }
@@ -126,6 +134,14 @@ const LeadsPipelinePage = () => {
                     fetchStatusesAndLeads()
                 }
             })
+            .catch(error => {
+                if (error.response?.status === 401) {
+                    localStorage.removeItem('userSessionData')
+                    navigate('/login')
+                }
+                alert('Ошибка. Обратитесь к разработчику')
+                console.error(error)
+            })
     }
 
     const submitCreateLead = async (e) => {
@@ -134,18 +150,25 @@ const LeadsPipelinePage = () => {
             .then((response) => {
                 if (response.status === 201) {
                     fetchStatusesAndLeads()
+                    setNewLead({
+                        title: "",
+                        fullname: "",
+                        phone: "",
+                        email: "",
+                        status_id: "",
+                        description: "",
+                    })
+                    setOpenNewLeadForm(false)
                 }
             })
-
-        setNewLead({
-            title: "",
-            fullname: "",
-            phone: "",
-            email: "",
-            status_id: "",
-            description: "",
-        })
-        setOpenNewLeadForm(false)
+            .catch(error => {
+                if (error.response?.status === 401) {
+                    localStorage.removeItem('userSessionData')
+                    navigate('/login')
+                }
+                alert('Ошибка. Обратитесь к разработчику')
+                console.error(error)
+            })
     }
 
     const cancelCreateLead = async () => {
@@ -189,6 +212,14 @@ const LeadsPipelinePage = () => {
                 setUpdateLead(null)
                 fetchStatusesAndLeads()
             }
+        })
+        .catch(error => {
+            if (error.response?.status === 401) {
+                localStorage.removeItem('userSessionData')
+                navigate('/login')
+            }
+            alert('Ошибка. Обратитесь к разработчику')
+            console.error(error)
         })
     }
 
