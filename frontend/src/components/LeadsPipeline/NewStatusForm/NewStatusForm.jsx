@@ -1,10 +1,12 @@
 import React, {useState} from "react"
 import './NewStatusForm.css'
 import api from "../../api";
+import { UserSessionContext } from "../../../contexts/UserSessionContext"
 
 const NewStatusForm = ({index, fetchStatusesAndLeads, setNewStatusIndex}) => {
     const [name, setName] = useState('')
     const [color, setColor] = useState('')
+    const { userSessionData, setUserSessionData } = React.useContext(UserSessionContext)
 
     const submitNewStatus = (e) => {
         e.preventDefault()
@@ -12,12 +14,25 @@ const NewStatusForm = ({index, fetchStatusesAndLeads, setNewStatusIndex}) => {
             name: name,
             color: color || 'black',
             index: index
+        }, {
+            headers: {
+                'Authorization': `Bearer ${userSessionData.accessToken}`
+            }
         })
             .then(response => {
                 if (response.status === 201) {
                     setNewStatusIndex(null)
+                    console.log('Статус успешно добавлен')
                     fetchStatusesAndLeads()
                 }
+            })
+            .catch(error => {
+                if (error.response?.status === 401) {
+                    localStorage.removeItem('userSessionData')
+                    setUserSessionData(null)
+                }
+                alert('Ошибка. Обратитесь к разработчику')
+                console.error(error)
             })
     }
 

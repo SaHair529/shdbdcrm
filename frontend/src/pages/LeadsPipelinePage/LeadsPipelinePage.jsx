@@ -304,6 +304,9 @@ const LeadsPipelinePage = () => {
         <DragDropContext onDragEnd={onDragEnd}>
             <div className="container-fluid">
                 <div className="pipeline">
+                    {statuses.length === 0 && (
+                        <NewStatusForm index={0} setNewStatusIndex={setNewStatusIndex} fetchStatusesAndLeads={fetchStatusesAndLeads} />
+                    )}
                     {newStatusIndex !== null && newStatusIndex === 0 && (
                         <NewStatusForm index={newStatusIndex} setNewStatusIndex={setNewStatusIndex} fetchStatusesAndLeads={fetchStatusesAndLeads} />
                     )}
