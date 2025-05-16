@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom"
 
 const LeadsPipelinePage = () => {
     const navigate = useNavigate()
-    const { userSessionData } = React.useContext(UserSessionContext)
+    const { userSessionData, setUserSessionData } = React.useContext(UserSessionContext)
     const [searchParams, setSearchParams] = useState(new URLSearchParams(window.location.search))
     const [statuses, setStatuses] = useState([]);
     const [leads, setLeads] = useState({});
@@ -53,11 +53,16 @@ const LeadsPipelinePage = () => {
         setLeads(newLeads);
 
         api.patch(`/lead/${lead.id}`, {
-            status_id: destinationStatusId,
+            status_id: destinationStatusId, 
+        }, {
+            headers: {
+                'Authorization': `Bearer ${userSessionData.accessToken}`
+            }
         })
         .catch(error => {
             if (error.response?.status === 401) {
                 localStorage.removeItem('userSessionData')
+                setUserSessionData(null)
                 navigate('/login')
             }
             alert('Ошибка. Обратитесь к разработчику')
@@ -120,6 +125,7 @@ const LeadsPipelinePage = () => {
         catch(error) {
             if (error.response?.status === 401) {
                 localStorage.removeItem('userSessionData')
+                setUserSessionData(null)
                 navigate('/login')
             }
 
@@ -129,7 +135,11 @@ const LeadsPipelinePage = () => {
     }
 
     const deleteLead = (id) => {
-        api.delete(`/lead/${id}`)
+        api.delete(`/lead/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${userSessionData.accessToken}`
+            }
+        })
             .then(response => {
                 if (response.status === 204) {
                     fetchStatusesAndLeads()
@@ -138,6 +148,7 @@ const LeadsPipelinePage = () => {
             .catch(error => {
                 if (error.response?.status === 401) {
                     localStorage.removeItem('userSessionData')
+                    setUserSessionData(null)
                     navigate('/login')
                 }
                 alert('Ошибка. Обратитесь к разработчику')
@@ -147,7 +158,11 @@ const LeadsPipelinePage = () => {
 
     const submitCreateLead = async (e) => {
         e.preventDefault()
-        api.post('/lead/', newLead)
+        api.post('/lead/', newLead, {
+            headers: {
+                'Authorization': `Bearer ${userSessionData.accessToken}`
+            }
+        })
             .then((response) => {
                 if (response.status === 201) {
                     fetchStatusesAndLeads()
@@ -165,6 +180,7 @@ const LeadsPipelinePage = () => {
             .catch(error => {
                 if (error.response?.status === 401) {
                     localStorage.removeItem('userSessionData')
+                    setUserSessionData(null)
                     navigate('/login')
                 }
                 alert('Ошибка. Обратитесь к разработчику')
@@ -207,7 +223,11 @@ const LeadsPipelinePage = () => {
     const submitUpdateLead = (e) => {
         e.preventDefault()
 
-        api.patch(`/lead/${updateLead.id}`, updateLead)
+        api.patch(`/lead/${updateLead.id}`, updateLead, {
+            headers: {
+                'Authorization': `Bearer ${userSessionData.accessToken}`
+            }
+        })
         .then((response) => {
             if (response.status === 200) {
                 setUpdateLead(null)
@@ -217,6 +237,7 @@ const LeadsPipelinePage = () => {
         .catch(error => {
             if (error.response?.status === 401) {
                 localStorage.removeItem('userSessionData')
+                setUserSessionData(null)
                 navigate('/login')
             }
             alert('Ошибка. Обратитесь к разработчику')
@@ -257,11 +278,24 @@ const LeadsPipelinePage = () => {
 
         const isConfirmed = window.confirm("Вы уверены, что хотите удалить данный статус?")
         if (isConfirmed) {
-            api.delete(`/status/${id}`)
+            api.delete(`/status/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${userSessionData.accessToken}`
+                }
+            })
             .then(response => {
                 if (response.status === 204) {
                     fetchStatusesAndLeads()
                 }
+            })
+            .catch(error => {
+                if (error.response?.status === 401) {
+                    localStorage.removeItem('userSessionData')
+                    setUserSessionData(null)
+                    navigate('/login')
+                }
+                alert('Ошибка. Обратитесь к разработчику')
+                console.error(error)
             })
         }
     }

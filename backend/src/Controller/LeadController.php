@@ -36,6 +36,7 @@ class LeadController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/{id}', methods: ['PATCH'])]
     public function patch(int $id, Request $request): JsonResponse
     {
@@ -74,6 +75,7 @@ class LeadController extends AbstractController
         return $this->json(null);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
@@ -113,6 +115,7 @@ class LeadController extends AbstractController
         return $this->json(null, Response::HTTP_CREATED);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/{id}', methods: ['DELETE'])]
     public function delete(int $id): JsonResponse
     {

@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/status')]
 class StatusController extends AbstractController
@@ -18,6 +19,7 @@ class StatusController extends AbstractController
     {
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/', methods: ['GET'])]
     public function list(): JsonResponse
     {
@@ -26,6 +28,7 @@ class StatusController extends AbstractController
         return $this->json($statuses, Response::HTTP_OK, [], ['groups' => 'status_compact']);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/{id<\d+>}', methods: ['DELETE'])]
     public function delete(int $id): JsonResponse
     {
@@ -37,6 +40,7 @@ class StatusController extends AbstractController
         return $this->json(null, Response::HTTP_NO_CONTENT);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
