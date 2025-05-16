@@ -47,7 +47,7 @@ const NewStatusForm = ({index, fetchStatusesAndLeads, setNewStatusIndex}) => {
                 <input
                     type="text"
                     className="form-control"
-                    placeholder="Введите название"
+                    placeholder="Введите название нового статуса"
                     name='name'
                     value={name}
                     required
