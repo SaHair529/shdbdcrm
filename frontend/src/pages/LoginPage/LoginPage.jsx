@@ -41,9 +41,10 @@ const LoginPage = () => {
 
     React.useEffect(() => {
         if (userSessionData) {
+
             navigate('/')
         }
-    })
+    }, [userSessionData, navigate])
 
     return (
         <div className="fullscreen-form-container">

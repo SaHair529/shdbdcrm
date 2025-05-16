@@ -122,6 +122,7 @@ const LeadsPipelinePage = () => {
                 localStorage.removeItem('userSessionData')
                 navigate('/login')
             }
+
             alert('Ошибка. Обратитесь к разработчику')
             console.error(error)
         }

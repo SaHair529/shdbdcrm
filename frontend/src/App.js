@@ -9,8 +9,8 @@ function App() {
 	return (
 		<UserSessionProvider>
 			<div className="App" >
-				<Menu/>
 				<Router>
+					<Menu/>
 					<Routes>
 						<Route path="/" exact element={<LeadsPipelinePage />} />
 						<Route path="/register" exact element={<RegisterPage />} />

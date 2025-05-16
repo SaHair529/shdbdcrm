@@ -41,3 +41,15 @@
         }
     }
 }
+
+.logout-button {
+    position: fixed;
+    right: 5px;
+    bottom: 5px;
+    color: #f65454;
+    cursor: pointer;
+
+    &:hover {
+        transform: scale(1.2);
+    }
+}
